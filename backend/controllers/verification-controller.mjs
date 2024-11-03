@@ -10,15 +10,16 @@ export const verifyDriverLicense = asyncHandler(async (req, res, next) => {
     console.log("Querying for license with:", { lastName, name });
 
     const license = await DriverLicense.findOne({ lastName, name });
-    // if (!license) {
-    //     return next(new ErrorResponse("License not found for the provided name", 404));
-    // }
+    if (!license) {
+        return next(new ErrorResponse("User not found", 404));
+    }
 
     const notification = await Notification.create({
         user: license.user, // The user to whom the license belongs
         message: `Verification request for ${licenseType} license. Do you want to share your information?`,
         requestId: license._id, // ID of the license for tracking the request
-        licenseType, // Type of license being requested
+        lastName,  // Add lastName to the notification
+        licenseType,  // Add licenseType to the notification
         status: "pending" // Set status to pending while awaiting response
     });
 
@@ -34,7 +35,9 @@ export const verifyDriverLicense = asyncHandler(async (req, res, next) => {
 export const approveLicenseVerification = asyncHandler(async (req, res, next) => {
     const requestId = req.params.requestId; // Extract the requestId from URL params
     console.log(requestId);
-
+    const { lastName, licenseType } = req.body;
+    console.log(lastName, licenseType);
+    
     if (!requestId) {
         // If no requestId is provided, return an error
         return next(new ErrorResponse("No request ID provided.", 400));
@@ -54,6 +57,10 @@ export const approveLicenseVerification = asyncHandler(async (req, res, next) =>
     if (!license) {
         // If no driver's license is found for the request, return an error
         return next(new ErrorResponse("No driver's license found for this ID.", 404));
+    }
+
+    if (license.lastName !== lastName || license.licenseType !== licenseType) {
+        return next(new ErrorResponse("You do not possess the requested license type. Verification failed.", 400));
     }
 
     // Set the license verification to approved

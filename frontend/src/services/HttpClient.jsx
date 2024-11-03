@@ -65,23 +65,22 @@ export const verifyDriverLicense = async ({ lastName, name, licenseType }) => {
   return response.data;
 };
 
-export const approveLicenseVerification = async (requestId) => {
+export const approveLicenseVerification = async (requestId, { lastName, licenseType }) => {
   const token = localStorage.getItem("token");
   try {
     const response = await axios.post(
       `http://localhost:5001/api/v1/verify/approve/${requestId}`,
-      {},
+      { lastName, licenseType },  // Send data in the request body
       {
         headers: {
-          Authorization: `Bearer ${token}`, // Include token in headers
+          Authorization: `Bearer ${token}`,
         },
       }
     );
-    console.log("Approval response:", response);  // Log response to verify it's successful
     return response.data;
   } catch (error) {
-    console.error("Approval request error:", error.response || error);  // Log detailed error response
-    throw error;  // Propagate error to the calling function
+    console.error("Approval request error:", error.response || error);
+    throw error;
   }
 };
 

@@ -10,10 +10,15 @@ const ApproveVerification = () => {
 
   const handleAccept = async () => {
     try {
-      const response = await approveLicenseVerification(requestId);  // Pass requestId here
+      // Send additional license details in the request
+      const response = await approveLicenseVerification(requestId, {
+        lastName: notification.lastName,
+        licenseType: notification.licenseType
+      });
+      
       setStatusMessage(response.message);
     } catch (error) {
-      setStatusMessage("An error occurred during approval.");
+      setStatusMessage(error.response?.data?.error || "An error occurred during approval.");
     }
   };
 
@@ -22,7 +27,7 @@ const ApproveVerification = () => {
       const response = await declineLicenseVerification(requestId);  // Pass requestId here
       setStatusMessage(response.message);
     } catch (error) {
-      setStatusMessage("An error occurred during approval.");
+      setStatusMessage(error.response?.data?.error || "An error occurred during approval.");
     }
   };
 
