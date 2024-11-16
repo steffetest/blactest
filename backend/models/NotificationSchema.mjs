@@ -35,7 +35,11 @@ const notificationSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    transactionHash: {
+        type: String,
+        default: null  // Field to store transaction hash
+    },
 });
 
 export default mongoose.model('Notification', notificationSchema);

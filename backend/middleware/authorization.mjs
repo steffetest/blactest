@@ -17,12 +17,19 @@ export const protect = asyncHandler(async (req, res, next) => {
     next(new ErrorResponse("Not authorized, you need to log in!", 401));
   }
 
-  const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
-  req.user = await User.findById(decodedToken.id);
+  try {
+    // Verify the token
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-  if (!req.user) {
-    next(new ErrorResponse("No user found with this ID", 401));
+    // Find the user by decoded ID and set to req.user
+    req.user = await User.findById(decoded.id);
+
+    if (!req.user) {
+      return next(new ErrorResponse("No user found with this ID", 401));
+    }
+
+    next();
+  } catch (error) {
+    return next(new ErrorResponse("Not authorized, invalid token", 401));
   }
-
-  next();
 });

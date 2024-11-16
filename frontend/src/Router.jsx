@@ -11,6 +11,8 @@ import Notifications from "./pages/Notifications";
 import ApproveVerification from "./components/ApproveVerification";
 import { AddLicenses } from "./pages/AddLicenses";
 import { VerificationPage } from "./pages/VerificationPage";
+import { RequestsPage } from "./pages/RequestsPage";
+import { RequestInfo } from "./components/RequestInfo";
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +58,14 @@ export const router = createBrowserRouter([
       {
         path: "/approve/:requestId",
         element: <ApproveVerification />,
+      },
+      {
+        path: "/requests",
+        element: <RequestsPage />,
+      },
+      {
+        path: "/requests/:requestId",
+        element: <RequestInfo />,
       },
     ],
   },

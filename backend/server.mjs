@@ -7,6 +7,7 @@ import licenseRouter from "./routes/license-routes.mjs"
 import verificationRouter from "./routes/verification-routes.mjs"
 import notificationRouter from "./routes/notification-routes.mjs"
 import { errorHandler } from "./middleware/errorHandler.mjs";
+import requestsRouter from "./routes/request-routes.mjs"
 
 dotenv.config({path: "./config/config.env"});
 
@@ -20,6 +21,7 @@ app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/licenses", licenseRouter);
 app.use("/api/v1/verify", verificationRouter);
 app.use("/api/v1/notifications", notificationRouter);
+app.use("/api/v1/requests", requestsRouter);
 
 app.use(errorHandler);
 

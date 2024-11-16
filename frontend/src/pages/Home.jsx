@@ -22,6 +22,9 @@ const Home = () => {
       <NavLink to="/verification">
         <button>Verification</button>
       </NavLink>
+      <NavLink to="/requests">
+        <button>Requests</button>
+      </NavLink>
     </div>
   )
 }

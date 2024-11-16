@@ -2,6 +2,43 @@ import { asyncHandler } from "../middleware/asyncHandler.mjs"; // Import the asy
 import ErrorResponse from "../models/ErrorResponseModel.mjs"; // Custom error handling class
 import DriverLicense from "../models/DriverLicenseSchema.mjs"; // DriverLicense schema/model for interacting with licenses
 import Notification from "../models/NotificationSchema.mjs"; // Notification schema/model for sending license verification requests
+import { ethers } from "ethers";
+import { contractAddress, abi } from "../config/blockchainConfig.mjs";
+import dotenv from "dotenv";
+
+dotenv.config({path: "./config/config.env"});
+
+const provider = new ethers.JsonRpcProvider(process.env.PROVIDER_URL);
+const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
+const contract = new ethers.Contract(contractAddress, abi, wallet);
+
+export const recordVerification = async (req, res) => {
+    const { requestId, userAddress, licenseType, isVerified } = req.body;
+    try {
+        const tx = await contract.recordVerification(requestId, userAddress, licenseType, isVerified);
+        const receipt = await tx.wait();
+        const transactionHash = receipt.hash;
+        
+        await Notification.findByIdAndUpdate(requestId, { transactionHash });
+        res.status(200).json({ success: true, message: "Verification recorded on-chain", transactionHash });
+    } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+    }
+};
+
+export const getVerificationStatus = async (req, res) => {
+    const { requestId } = req.params;
+    try {
+        const [isVerified, licenseType, timestamp, userAddress] = await contract.getVerificationStatus(requestId);
+
+        const notification = await Notification.findById(requestId);
+        const transactionHash = notification.transactionHash || "Not available";
+
+        res.status(200).json({ isVerified, licenseType, timestamp: timestamp.toString(), userAddress, transactionHash });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
 // This function verifies if a driver's license exists and creates a verification request if it does.
 export const verifyDriverLicense = asyncHandler(async (req, res, next) => {

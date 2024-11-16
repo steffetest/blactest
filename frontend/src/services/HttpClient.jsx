@@ -132,6 +132,41 @@ export const getNotificationStatus = async (requestId) => {
   }
 };
 
+export const getRequests = async () => {
+  const token = localStorage.getItem("token");
+
+  const response = await axios.get(
+    'http://localhost:5001/api/v1/requests',
+    {
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    }
+  );
+
+  return response.data;
+};
+
+export const getRequestInfo = async (requestId) => {
+  const token = localStorage.getItem("token");
+
+  try {
+    const response = await axios.get(
+      `http://localhost:5001/api/v1/requests/${requestId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching request info:', error);
+    throw error;
+  }
+};
+
 export const markNotificationAsRead = async (notificationId) => {
   const token = localStorage.getItem("token");
 
