@@ -2,15 +2,6 @@ import { asyncHandler } from "../middleware/asyncHandler.mjs"; // Import the asy
 import ErrorResponse from "../models/ErrorResponseModel.mjs"; // Custom error handling class
 import DriverLicense from "../models/DriverLicenseSchema.mjs"; // DriverLicense schema/model for interacting with licenses
 import Notification from "../models/NotificationSchema.mjs"; // Notification schema/model for sending license verification requests
-// import { ethers } from "ethers";
-// import { abi } from "../contract-abi.json"
-// import dotenv from "dotenv";
-
-// dotenv.config({path: "./config/config.env"});
-
-// const provider = new ethers.JsonRpcProvider(process.env.PROVIDER_URL);
-// const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
-// const contract = new ethers.Contract(process.env.CONTRACT_ADDRESS, abi, wallet);
 
 export const recordVerification = async (req, res) => {
     const { requestId, userAddress, licenseType, isVerified } = req.body;
