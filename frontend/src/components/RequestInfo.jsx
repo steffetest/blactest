@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { getRequestInfo, getUserDetails } from '../services/HttpClient';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -16,22 +16,19 @@ export const RequestInfo = () => {
             try {
                 const response = await getRequestInfo(requestId);
                 setRequestInfo(response.data);
-                console.log("Reponse.data.user:", response.data.user);
-                
-                
-                
+                console.log('Reponse.data.user:', response.data.user);
+
                 const userResponse = await getUserDetails();
                 setLoggedInUserId(userResponse.data.id);
-                console.log("UserResponse:", userResponse);
-                console.log("UserResponse.data.id:", userResponse.data._id);
-                
-                
+                console.log('UserResponse:', userResponse);
+                console.log('UserResponse.data.id:', userResponse.data._id);
+
                 if (userResponse.data._id === response.data.user) {
                     setIsOwner(true);
                 }
             } catch (error) {
-                console.error("Error fetching request info:", error);
-                setError("Failed to load request info. Please try again.");
+                console.error('Error fetching request info:', error);
+                setError('Failed to load request info. You need to log in to see info.');
             } finally {
                 setLoading(false);
             }
@@ -44,25 +41,32 @@ export const RequestInfo = () => {
     };
 
     if (loading) return <p>Loading request info...</p>;
-    if (error) return <p>{error}</p>;
 
     return (
-        <div className='pageWrapper'>
+        <div className="container">
             <h1>Request Info</h1>
-            {isOwner ? (
-                <div>
-                    <p><strong>Message:</strong> {requestInfo.message}</p>
-                    <p><strong>User:</strong> {requestInfo.user}</p>
-                    <p><strong>Request ID:</strong> {requestInfo.requestId}</p>
-                    <p><strong>Status:</strong> {requestInfo.status}</p>
-                    <p><strong>Created At:</strong> {new Date(requestInfo.createdAt).toLocaleString()}</p>
-                </div>
-            ) : (
-                <div>
-                    <p>{requestInfo.message}</p>
-                    <button onClick={handleLogin}>Log in to view more</button>
-                </div>
-            )}
+            {error ? (
+                <p>{error}</p>
+            ) : requestInfo ? (
+                isOwner ? (
+                    <div>
+                        <p><strong>Message:</strong> {requestInfo.message}</p>
+                        <p><strong>Request ID:</strong> {requestInfo.requestId}</p>
+                        <p><strong>User:</strong> {requestInfo.user}</p>
+                        <p><strong>First Name:</strong> {requestInfo.name}</p>
+                        <p><strong>Last Name:</strong> {requestInfo.lastName}</p>
+                        <p><strong>License Type:</strong> {requestInfo.licenseType}</p>
+                        <p><strong>Status:</strong> {requestInfo.status}</p>
+                        <p><strong>Created At:</strong> {new Date(requestInfo.createdAt).toLocaleString()}</p>
+                    </div>
+                ) : (
+                    <div>
+                        <p>{requestInfo.message}</p>
+                        <p>Status: {requestInfo.status}</p>
+                    </div>
+                )
+            ) : null}
+            <button onClick={handleLogin}>Log in as user to view data</button>
         </div>
     );
 };

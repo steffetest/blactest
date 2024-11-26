@@ -44,8 +44,8 @@ export const AddLicenses = () => {
         setIsFormVisible(!isFormVisible);
     };
   return (
-    <div className='pageWrapper'>
-        <h1>Add Licenses</h1>
+    <div className='container flex flex-column'>
+        <h1 className='pageheader'>Add Licenses</h1>
 
         <button onClick={toggleForm}>Add Drivers License</button>
 

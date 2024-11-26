@@ -39,8 +39,8 @@ export const Licenses = () => {
   };
 
   return (
-    <div className='pageWrapper'>
-      <h1>Licences</h1>
+    <div className='container flex flex-column'>
+      <h1 className='pageheader'>Licences</h1>
       <button onClick={fetchDriversLicense}>Drivers License</button>
 
       {loading ? (

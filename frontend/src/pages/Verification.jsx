@@ -24,7 +24,7 @@ export const Verification = () => {
   };
 
   return (
-    <div className='pageWrapper'>
+    <div className='container flex flex-column'>
       <h2>Verify Driver's License</h2>
       <form className='forms' onSubmit={handleVerify}>
         <label>Last Name: </label>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { getNotificationStatus } from '../services/HttpClient';
 
 export const VerificationPage = () => {
@@ -7,6 +7,8 @@ export const VerificationPage = () => {
     const [status, setStatus] = useState("Awaiting response...");
 
     useEffect(() => {
+        let pollCount = 0;
+
         const fetchStatus = async () => {
             try {
                 const response = await getNotificationStatus(requestId);
@@ -25,6 +27,13 @@ export const VerificationPage = () => {
             } catch (error) {
                 console.error("Error fetching notification status:", error);
             }
+
+            // Increment the counter and stop polling if it exceeds the limit
+            pollCount += 1;
+            if (pollCount >= 60) {
+                clearInterval(intervalId);
+                console.log("Polling stopped after 60 attempts. (5 minutes)");
+            }
         };
 
         // Fetch status immediately
@@ -38,9 +47,14 @@ export const VerificationPage = () => {
     }, [requestId]);
 
     return (
-        <div className='pageWrapper'>
+        <div className='container'>
             <h2>Verification Status</h2>
             <p>{status}</p>
+            <br />
+            <p>Your Request ID: {requestId}</p>
+            <Link to={`/requests`}>
+                See Requests
+            </Link>
         </div>
     );
 };

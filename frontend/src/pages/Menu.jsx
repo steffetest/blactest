@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 
 const Menu = () => {
     const [userName, setUserName] = useState("");
+    const [userId, setUserId] = useState("");
 
     const navigate = useNavigate();
 
@@ -13,6 +14,7 @@ const Menu = () => {
         try {
           const response = await getUserDetails();
           setUserName(response.data.name)
+          setUserId(response.data._id)
         } catch (error) {
           console.error("Error fetching user data", error);
         }
@@ -21,21 +23,12 @@ const Menu = () => {
       fetchUserData();
     }, []);
 
-    const handleLogout = () => {
-      localStorage.removeItem("token");
-
-      toast.success("You are now logged out!")
-
-      navigate("/");
-    };
 
   return (
-    <div className='pageWrapper'>
+    <div className='container flex flex-column'>
 
-      <div className='menuHeaderAndLogoutWrapper'>
-        <h1>Welcome {userName}!</h1>
-        <button onClick={handleLogout}>Logout</button>
-      </div>
+      <h1 className='pageheader'>Welcome {userName}!</h1>
+      <h3 className='pageheader'>User ID: {userId}</h3>
 
       <NavLink to="/addlicense">
         <button>Add Licenses</button>

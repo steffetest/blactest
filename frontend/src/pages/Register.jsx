@@ -25,7 +25,7 @@ export const Register = () => {
   };
 
   return (
-    <div className="pageWrapper">
+    <div className="container flex flex-column">
       <form className="forms" onSubmit={handleSubmit}>
           <label>Name: </label>
           <input

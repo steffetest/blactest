@@ -5,7 +5,7 @@ import { protect } from '../middleware/authorization.mjs';
 
 const router = express.Router();
 
-router.route('/').get(protect, getRequests);
+router.route('/').get(getRequests);
 router.route('/:requestId').get(protect, getRequestInfo);
 
 

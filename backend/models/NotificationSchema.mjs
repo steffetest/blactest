@@ -15,6 +15,10 @@ const notificationSchema = new mongoose.Schema({
         ref: 'DriverLicense',
         required: true
     },
+    name: {  // Add lastName field
+        type: String,
+        required: true
+    },
     lastName: {  // Add lastName field
         type: String,
         required: true

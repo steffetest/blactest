@@ -12,19 +12,18 @@ const Home = () => {
   }, [token, navigate]);
 
   return (
-    <div className='home'>
-      <NavLink to="/login">
-        <button>Log in</button>
-      </NavLink>
-      <NavLink to="/register">
-        <button>Sign up</button>
-      </NavLink>
-      <NavLink to="/verification">
-        <button>Verification</button>
-      </NavLink>
-      <NavLink to="/requests">
-        <button>Requests</button>
-      </NavLink>
+    <div className='container'>
+
+        <h1 className='homepage-header pageheader'>Secure, Verifiable, Accessible</h1>
+
+      <div className='homepage-links'>
+        <NavLink to="/login">
+          <button>Log in</button>
+        </NavLink>
+        <NavLink to="/register">
+          <button>Sign up</button>
+        </NavLink>
+      </div>
     </div>
   )
 }

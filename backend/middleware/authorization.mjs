@@ -30,6 +30,6 @@ export const protect = asyncHandler(async (req, res, next) => {
 
     next();
   } catch (error) {
-    return next(new ErrorResponse("Not authorized, invalid token", 401));
+    return next(new ErrorResponse("Not authorized, invalid token. Please try to log in", 401));
   }
 });

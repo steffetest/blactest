@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
+import { Header } from "../components/Header";
+import { Footer } from "../components/Footer";
 
 export const Layout = () => {
     // const navigate = useNavigate();
@@ -13,12 +15,11 @@ export const Layout = () => {
 
   return (
     <>
-        <main className='blackbox-container'>
-          <NavLink to={"/"}>
-            <h1 className="logo">Blackbox</h1>
-          </NavLink>
-          <Outlet />
-        </main>
+      <Header />
+      <main className='blackbox-container'>
+        <Outlet />
+      </main>
+      <Footer />
     </>
   );
 };

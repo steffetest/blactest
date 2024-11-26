@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { login } from "../services/HttpClient";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { login as loginApi } from "../services/HttpClient";
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 export const Login = () => {
     const [email, setEmail] = useState("stefan@mail.com");
@@ -8,13 +9,14 @@ export const Login = () => {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const { login } = useAuth();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await login(email, password);
+          const response = await loginApi(email, password);
 
-          localStorage.setItem("token", response.token);
+          login(response.token);
 
           const returnTo = location.state?.returnTo || "/menu";  // Redirect to intended page or default menu page
           
@@ -26,7 +28,7 @@ export const Login = () => {
       };
 
   return (
-    <div className="pageWrapper">
+    <div className="container flex flex-column">
       <form className="forms" onSubmit={handleSubmit}>
           <label>Email: </label>
           <input
@@ -42,6 +44,9 @@ export const Login = () => {
           />
         <button type="submit">Log in</button>
       </form>
+      <p>If you don't have an account you can
+        <Link to="/register"> Sign Up</Link>
+      </p>
     </div>
   )
 }
