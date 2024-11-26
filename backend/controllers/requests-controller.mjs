@@ -32,6 +32,7 @@ export const getRequestInfo = asyncHandler(async (req, res, next) => {
             message: request.message,
             user: request.user,
             requestId: request._id,
+            transactionHash: request.transactionHash,
             name: request.name,
             lastName: request.lastName,
             licenseType: request.licenseType,

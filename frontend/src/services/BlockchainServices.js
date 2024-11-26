@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import abi from '../../contract-abi.json';
+import axios from 'axios';
 
 // import { createAlchemyWeb3 } from "@alch/alchemy-web3"
 // const alchemyKey = process.env.REACT_APP_ALCHEMY_KEY;
@@ -12,24 +13,6 @@ const CONTRACT_ADDRESS = "0xc761F8E6Cb9af69C49ef3EaA1140b07AAd8056e9";
 //   CONTRACT_ADDRESS
 // );
 
-
-
-// export const connectToMetaMask = async () => {
-//   if (!window.ethereum) {
-//     throw new Error("MetaMask is not installed. Please install it to use this feature.");
-//   }
-
-//   try {
-//     // Request account access
-//     await window.ethereum.request({ method: "eth_requestAccounts" });
-
-//     // Return the contract instance with the signer
-//     return new ethers.Contract(CONTRACT_ADDRESS, abi, signer);
-//   } catch (error) {
-//     console.error("MetaMask connection failed:", error);
-//     throw error;
-//   }
-// };
 
 export const connectToMetaMask = async () => {
   if (!window.ethereum) {
@@ -61,9 +44,20 @@ export const connectToMetaMask = async () => {
 export const recordVerification = async ({requestId, userAddress, licenseType, isVerified}) => {
   try {
     const contract = await connectToMetaMask();
+
+    // Interact with the contract
     const tx = await contract.recordVerification(requestId, userAddress, licenseType, isVerified);
     await tx.wait();
-    return tx.hash; // Return transaction hash
+
+    const transactionHash = tx.hash;
+
+    // Send transactionHash to the backend to update the notification
+    await axios.post("http://localhost:5001/api/v1/notifications/updateNotification", {
+      requestId,
+      transactionHash,
+    });
+
+    return transactionHash; // Return transaction hash
   } catch (error) {
     console.error("Failed to record verification:", error);
     throw error;
@@ -87,42 +81,3 @@ export const getVerificationStatus = async (requestId) => {
     throw error;
   }
 };
-
-
-
-// import axios from "axios";
-
-// export const recordVerification = async ({requestId, userAddress, licenseType, isVerified}) => {
-//     const registerData = {requestId, userAddress, licenseType, isVerified};
-//     const token = localStorage.getItem("token");
-
-//     return await axios.post(
-//         `http://localhost:5001/api/v1/verify/record-verification`, 
-//         registerData,
-//         {
-//             headers: {
-//                 Authorization: `Bearer ${token}`
-//             }
-//         }
-//     );
-// };
-
-// export const getVerificationStatus = async (requestId) => {
-//     const token = localStorage.getItem("token");
-  
-//     try {
-//       const response = await axios.get(
-//         `http://localhost:5001/api/v1/verify/verification-status/${requestId}`,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${token}`
-//           }
-//         }
-//       );
-      
-//       return response.data;
-//     } catch (error) {
-//       console.error("Error fetching verification status:", error);
-//       throw error;
-//     }
-// };

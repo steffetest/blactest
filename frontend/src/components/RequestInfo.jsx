@@ -51,6 +51,7 @@ export const RequestInfo = () => {
                 isOwner ? (
                     <div>
                         <p><strong>Message:</strong> {requestInfo.message}</p>
+                        <p><strong>Transaction Hash:</strong> {requestInfo.transactionHash}</p>
                         <p><strong>Request ID:</strong> {requestInfo.requestId}</p>
                         <p><strong>User:</strong> {requestInfo.user}</p>
                         <p><strong>First Name:</strong> {requestInfo.name}</p>
